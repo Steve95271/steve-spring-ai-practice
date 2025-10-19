@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.steve</groupId>
-	<artifactId>SpringAI_System_Role</artifactId>
+	<artifactId>SpringAI_Practice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringAI_System_Role</name>
-	<description>SpringAI System role</description>
+	<name>SpringAI_Practice</name>
+	<description>SpringAI Practice</description>
 	<url/>
 	<licenses>
 		<license/>

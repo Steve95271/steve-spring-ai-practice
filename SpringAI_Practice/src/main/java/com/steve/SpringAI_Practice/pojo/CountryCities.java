@@ -1,4 +1,4 @@
-package com.steve.SpringAI_System_Role.pojo;
+package com.steve.SpringAI_Practice.pojo;
 
 import java.util.List;
 

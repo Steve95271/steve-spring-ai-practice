@@ -1,4 +1,4 @@
-package com.steve.SpringAI_System_Role.controller;
+package com.steve.SpringAI_Practice.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,10 +1,10 @@
-package com.steve.SpringAI_System_Role;
+package com.steve.SpringAI_Practice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringAISystemRoleApplicationTests {
+class SpringAIApplicationTests {
 
 	@Test
 	void contextLoads() {

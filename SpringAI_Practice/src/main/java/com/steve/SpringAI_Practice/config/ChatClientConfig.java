@@ -1,6 +1,6 @@
-package com.steve.SpringAI_System_Role.config;
+package com.steve.SpringAI_Practice.config;
 
-import com.steve.SpringAI_System_Role.advisors.TokenUsageAuditAdvisor;
+import com.steve.SpringAI_Practice.advisors.TokenUsageAuditAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.ollama.OllamaChatModel;

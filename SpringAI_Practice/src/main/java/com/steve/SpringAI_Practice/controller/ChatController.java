@@ -1,28 +1,34 @@
-package com.steve.SpringAI_System_Role.controller;
+package com.steve.SpringAI_Practice.controller;
 
-import com.steve.SpringAI_System_Role.pojo.CountryCities;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class StructureOutputController {
+public class ChatController {
+
     private final ChatClient chatClient;
 
-    public StructureOutputController(@Qualifier("openaiChatClient") ChatClient chatClientBuilder) {
+    public ChatController(@Qualifier("openaiChatClient") ChatClient chatClientBuilder) {
         this.chatClient = chatClientBuilder;
     }
 
-    @GetMapping("/chat-bean")
-    public CountryCities chatBean(String message) {
+    @Value("classpath:/promptTemplates/systemPromptTemplate.st")
+    Resource systemPromptTemplate;
+
+    @GetMapping("/chat")
+    public String chat(String message) {
         return chatClient
                 .prompt()
+                .system(systemPromptTemplate)
                 .user(message)
                 .call()
-                .entity(CountryCities.class);
+                .content();
     }
 
 }

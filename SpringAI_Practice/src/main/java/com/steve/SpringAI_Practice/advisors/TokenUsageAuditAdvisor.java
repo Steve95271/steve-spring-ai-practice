@@ -1,4 +1,4 @@
-package com.steve.SpringAI_System_Role.advisors;
+package com.steve.SpringAI_Practice.advisors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
