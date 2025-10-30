@@ -25,7 +25,7 @@ public class ChatController {
     public String chat(String message) {
         return chatClient
                 .prompt()
-                .system(systemPromptTemplate)
+//                .system(systemPromptTemplate)
                 .user(message)
                 .call()
                 .content();

@@ -1,6 +1,7 @@
 package com.steve.SpringAI_Practice.config;
 
 import com.steve.SpringAI_Practice.advisors.TokenUsageAuditAdvisor;
+import com.steve.SpringAI_Practice.rag.WebSearchDocumentRetriever;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -13,6 +14,7 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -30,8 +32,8 @@ public class ChatClientConfig {
     @Bean
     public ChatClient openaiChatClient(OpenAiChatModel openAiChatModel) {
         OpenAiChatOptions openAiChatOptions = OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.8).build();
-        ChatClient.Builder chatClientBuilder = ChatClient.builder(openAiChatModel);
-        return chatClientBuilder
+
+        return ChatClient.builder(openAiChatModel)
                 .defaultOptions(openAiChatOptions)
                 .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), new TokenUsageAuditAdvisor()))
                 .build();
@@ -48,7 +50,7 @@ public class ChatClientConfig {
                 .defaultOptions(openAiChatOptions)
                 .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor))
                 .build();
-     }
+    }
 
     @Bean
     public ChatClient chatMemoryOllamaChatClient(
@@ -63,13 +65,34 @@ public class ChatClientConfig {
         return ChatClient
                 .builder(ollamaChat)
                 .defaultOptions(ollamaOptions)
-                .defaultAdvisors(
-                        List.of(
-                                loggerAdvisor,
-                                memoryAdvisor,
-                                retrievalAugmentationAdvisor
-                        )
-                )
+                .defaultAdvisors(List.of(
+                        loggerAdvisor,
+                        memoryAdvisor,
+                        retrievalAugmentationAdvisor))
+                .build();
+    }
+
+    @Bean
+    public ChatClient webSearchRAGChatClient(
+            OpenAiChatModel openAiChatModel,
+            ChatMemory chatMemory,
+            RestClient.Builder restClientBuilder
+    ) {
+
+        Advisor loggerAdvisor = new SimpleLoggerAdvisor();
+        Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
+        Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+        var webSearchRAGAdvisor = RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(WebSearchDocumentRetriever
+                        .builder()
+                        .restClientBuilder(restClientBuilder)
+                        .maxResults(5)
+                        .build())
+                .build();
+        return ChatClient
+                .builder(openAiChatModel)
+                .defaultOptions(OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.7).build())
+                .defaultAdvisors(List.of(loggerAdvisor, tokenUsageAdvisor, memoryAdvisor, webSearchRAGAdvisor))
                 .build();
     }
 

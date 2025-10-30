@@ -20,6 +20,7 @@ import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 public class RAGController {
 
     private final ChatClient chatClient;
+    private final ChatClient webSearchChatClient;
     private final VectorStore vectorStore;
 
     @Value("classpath:/promptTemplates/systemPromptRandomDataTemplate.st")
@@ -27,9 +28,11 @@ public class RAGController {
 
     public RAGController(
             @Qualifier("chatMemoryOpenAiChatClient") ChatClient chatClient,
+            @Qualifier("webSearchRAGChatClient") ChatClient webSearchChatClient,
             VectorStore vectorStore
     ) {
         this.chatClient = chatClient;
+        this.webSearchChatClient = webSearchChatClient;
         this.vectorStore = vectorStore;
     }
 
@@ -75,6 +78,18 @@ public class RAGController {
                         .call()
                         .content()
         );
+    }
+
+    @GetMapping("/web-search/chat")
+    public ResponseEntity<String> webSearchChat(
+            @RequestHeader("username") String username,
+            @RequestParam("message") String message
+    ) {
+        String answer = webSearchChatClient.prompt()
+                .advisors(a -> a.param(CONVERSATION_ID, username))
+                .user(message)
+                .call().content();
+        return ResponseEntity.ok(answer);
     }
 
 }
