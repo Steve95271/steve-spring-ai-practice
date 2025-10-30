@@ -7,8 +7,10 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,14 +38,38 @@ public class ChatClientConfig {
     }
 
     @Bean
-    public ChatClient chatMemoryChatClient(OpenAiChatModel openAiChatModel, ChatMemory chatMemory) {
+    public ChatClient chatMemoryOpenAiChatClient(OpenAiChatModel openAiChatModel, ChatMemory chatMemory) {
         Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
         Advisor loggerAdvisor = new SimpleLoggerAdvisor();
         OpenAiChatOptions openAiChatOptions = OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.7).build();
         ChatClient.Builder chatClientBuilder = ChatClient.builder(openAiChatModel);
+
         return chatClientBuilder
                 .defaultOptions(openAiChatOptions)
                 .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor))
+                .build();
+     }
+
+    @Bean
+    public ChatClient chatMemoryOllamaChatClient(
+            OllamaChatModel ollamaChat,
+            ChatMemory chatMemory,
+            RetrievalAugmentationAdvisor retrievalAugmentationAdvisor
+    ) {
+        Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+        Advisor loggerAdvisor = new SimpleLoggerAdvisor();
+        OllamaOptions ollamaOptions = OllamaOptions.builder().temperature(0.7).build();
+
+        return ChatClient
+                .builder(ollamaChat)
+                .defaultOptions(ollamaOptions)
+                .defaultAdvisors(
+                        List.of(
+                                loggerAdvisor,
+                                memoryAdvisor,
+                                retrievalAugmentationAdvisor
+                        )
+                )
                 .build();
     }
 

@@ -12,7 +12,7 @@ public class ChatMemoryController {
 
     private final ChatClient chatClient;
 
-    public ChatMemoryController(@Qualifier("chatMemoryChatClient") ChatClient chatClient) {
+    public ChatMemoryController(@Qualifier("chatMemoryOpenAiChatClient") ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
