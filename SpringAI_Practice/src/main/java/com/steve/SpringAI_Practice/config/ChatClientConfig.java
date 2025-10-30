@@ -44,9 +44,8 @@ public class ChatClientConfig {
         Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
         Advisor loggerAdvisor = new SimpleLoggerAdvisor();
         OpenAiChatOptions openAiChatOptions = OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.7).build();
-        ChatClient.Builder chatClientBuilder = ChatClient.builder(openAiChatModel);
 
-        return chatClientBuilder
+        return ChatClient.builder(openAiChatModel)
                 .defaultOptions(openAiChatOptions)
                 .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor))
                 .build();

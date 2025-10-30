@@ -1,4 +1,4 @@
-package com.steve.SpringAI_Practice.config;
+package com.steve.SpringAI_Practice.advisors;
 
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RAGConfig {
+public class RAGAdvisor {
 
     @Bean
     RetrievalAugmentationAdvisor retrievalAugmentationAdvisor(VectorStore vectorStore) {
