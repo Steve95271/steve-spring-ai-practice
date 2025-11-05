@@ -2,6 +2,7 @@ package com.steve.SpringAI_Practice.config;
 
 import com.steve.SpringAI_Practice.advisors.TokenUsageAuditAdvisor;
 import com.steve.SpringAI_Practice.rag.WebSearchDocumentRetriever;
+import com.steve.SpringAI_Practice.tools.TimeTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -92,6 +93,25 @@ public class ChatClientConfig {
                 .builder(openAiChatModel)
                 .defaultOptions(OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.7).build())
                 .defaultAdvisors(List.of(loggerAdvisor, tokenUsageAdvisor, memoryAdvisor, webSearchRAGAdvisor))
+                .build();
+    }
+
+    @Bean("timeChatClient")
+    public ChatClient timeChatClient(
+            OpenAiChatModel openAiChatModel,
+            ChatMemory chatMemory,
+            TimeTools timeTools
+
+    ) {
+        return ChatClient
+                .builder(openAiChatModel)
+                .defaultOptions(OpenAiChatOptions.builder().model("gpt-4o-mini").temperature(0.7).build())
+                .defaultTools(timeTools)
+                .defaultAdvisors(List.of(
+                        new SimpleLoggerAdvisor(),
+                        new TokenUsageAuditAdvisor(),
+                        MessageChatMemoryAdvisor.builder(chatMemory).build()
+                ))
                 .build();
     }
 
