@@ -1,6 +1,6 @@
 package com.steve.SpringAI_Practice.controller;
 
-import com.steve.SpringAI_Practice.pojo.CountryCities;
+import com.steve.SpringAI_Practice.model.CountryCities;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;

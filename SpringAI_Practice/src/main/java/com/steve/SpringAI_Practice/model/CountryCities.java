@@ -1,4 +1,4 @@
-package com.steve.SpringAI_Practice.pojo;
+package com.steve.SpringAI_Practice.model;
 
 import java.util.List;
 
